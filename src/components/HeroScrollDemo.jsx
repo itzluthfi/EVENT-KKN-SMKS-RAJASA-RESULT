@@ -18,7 +18,7 @@ export function HeroScrollDemo() {
         }
       >
         <img
-          src={`/assets/foto/fotbar-kelompok.jpeg`}
+          src={`./assets/foto/fotbar-kelompok.jpeg`}
           alt="hero"
           className="mx-auto rounded-2xl object-cover h-full w-full object-center"
           draggable={false}

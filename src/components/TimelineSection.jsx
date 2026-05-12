@@ -80,7 +80,7 @@ export default function TimelineSection() {
                   {/* IMAGE SIDE */}
                   <div className="w-full md:w-[45%] lg:w-[50%] shrink-0 aspect-video md:aspect-[4/3] rounded-3xl overflow-hidden relative group border border-white/10 shadow-2xl">
                     <img 
-                      src={`/assets/foto/${index === 0 ? '2.JPG' : index === 1 ? '3.JPG' : index === 2 ? '5.JPG' : '8.JPG'}`} 
+                      src={`./assets/foto/${index === 0 ? '2.JPG' : index === 1 ? '3.JPG' : index === 2 ? '5.JPG' : '8.JPG'}`} 
                       alt={item.title} 
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                       loading="lazy"

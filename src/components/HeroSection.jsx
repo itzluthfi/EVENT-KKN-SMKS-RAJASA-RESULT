@@ -5,19 +5,19 @@ import IconRenderer from './IconRenderer';
 import { TestimonialsColumn } from './ui/testimonials-columns-1';
 
 const heroMedia = [
-  { type: 'image', src: '/assets/foto/1.jpg' },
-  { type: 'video', src: '/assets/video/1.mp4' },
-  { type: 'image', src: '/assets/foto/2.JPG' },
-  { type: 'image', src: '/assets/foto/3.JPG' },
-  { type: 'video', src: '/assets/video/2.MP4' },
-  { type: 'image', src: '/assets/foto/4.JPG' },
-  { type: 'image', src: '/assets/foto/5.JPG' },
-  { type: 'video', src: '/assets/video/3.MP4' },
-  { type: 'image', src: '/assets/foto/6.JPG' },
-  { type: 'video', src: '/assets/video/4.MP4' },
-  { type: 'image', src: '/assets/foto/7.JPG' },
-  { type: 'image', src: '/assets/foto/8.JPG' },
-  { type: 'video', src: '/assets/video/5.MP4' },
+  { type: 'image', src: './assets/foto/1.jpg' },
+  { type: 'video', src: './assets/video/1.mp4' },
+  { type: 'image', src: './assets/foto/2.JPG' },
+  { type: 'image', src: './assets/foto/3.JPG' },
+  { type: 'video', src: './assets/video/2.MP4' },
+  { type: 'image', src: './assets/foto/4.JPG' },
+  { type: 'image', src: './assets/foto/5.JPG' },
+  { type: 'video', src: './assets/video/3.MP4' },
+  { type: 'image', src: './assets/foto/6.JPG' },
+  { type: 'video', src: './assets/video/4.MP4' },
+  { type: 'image', src: './assets/foto/7.JPG' },
+  { type: 'image', src: './assets/foto/8.JPG' },
+  { type: 'video', src: './assets/video/5.MP4' },
 ];
 
 const col1 = heroMedia.slice(0, 4);
