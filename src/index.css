@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@source "./components";
+@source "./components/ui";
 
 @theme {
   --color-emerald: #10b981;

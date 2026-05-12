@@ -1,9 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Link, Zap } from "lucide-react";
-import { Badge } from "./badge";
-import { Button } from "./button";
-import { Card, CardContent, CardHeader, CardTitle } from "./card";
 import IconRenderer from "../IconRenderer";
 
 export default function RadialOrbitalTimeline({ timelineData }) {
@@ -120,13 +117,13 @@ export default function RadialOrbitalTimeline({ timelineData }) {
   const getStatusStyles = (status) => {
     switch (status) {
       case "completed":
-        return "text-white bg-black border-white";
+        return "text-white bg-black/50 border-white/20";
       case "in-progress":
-        return "text-black bg-white border-black";
+        return "text-black bg-white border-white";
       case "pending":
-        return "text-white bg-black/40 border-white/50";
+        return "text-white/70 bg-white/10 border-white/10";
       default:
-        return "text-white bg-black/40 border-white/50";
+        return "text-white/70 bg-white/10 border-white/10";
     }
   };
 
@@ -230,67 +227,63 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                 </div>
 
                 {isExpanded && (
-                  <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-64 bg-black/90 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 overflow-visible">
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/50"></div>
-                    <CardHeader className="pb-2">
-                      <div className="flex justify-between items-center">
-                        <Badge
-                          className={`px-2 text-xs ${getStatusStyles(
-                            item.status
-                          )}`}
-                        >
+                  <div className="absolute top-20 left-1/2 -translate-x-1/2 w-72 bg-[#050505] border border-white/10 rounded-xl shadow-2xl overflow-visible z-[999] pointer-events-auto">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/30"></div>
+                    
+                    <div className="p-5 pb-3">
+                      <div className="flex justify-between items-center mb-3">
+                        <div className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${getStatusStyles(item.status)}`}>
                           {item.status === "completed"
                             ? "COMPLETE"
                             : item.status === "in-progress"
                             ? "IN PROGRESS"
                             : "PENDING"}
-                        </Badge>
+                        </div>
                         <span className="text-xs font-mono text-white/50">
                           {item.date}
                         </span>
                       </div>
-                      <CardTitle className="text-sm mt-2">
+                      <h3 className="text-lg font-bold leading-tight tracking-tight text-white">
                         {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-xs text-white/80">
+                      </h3>
+                    </div>
+                    
+                    <div className="p-5 pt-0 text-sm text-white/80 leading-relaxed">
                       <p>{item.content}</p>
 
-                      <div className="mt-4 pt-3 border-t border-white/10">
-                        <div className="flex justify-between items-center text-xs mb-1">
+                      <div className="mt-5 pt-4 border-t border-white/10">
+                        <div className="flex justify-between items-center text-xs mb-2 text-white/60">
                           <span className="flex items-center">
-                            <Zap size={10} className="mr-1" />
+                            <Zap size={14} className="mr-1" />
                             Energy Level
                           </span>
-                          <span className="font-mono">{item.energy}%</span>
+                          <span className="font-mono text-white/80">{item.energy}%</span>
                         </div>
-                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-emerald-500 to-violet-500"
+                            className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500"
                             style={{ width: `${item.energy}%` }}
                           ></div>
                         </div>
                       </div>
 
                       {item.relatedIds.length > 0 && (
-                        <div className="mt-4 pt-3 border-t border-white/10">
-                          <div className="flex items-center mb-2">
-                            <Link size={10} className="text-white/70 mr-1" />
-                            <h4 className="text-xs uppercase tracking-wider font-medium text-white/70">
+                        <div className="mt-5 pt-4 border-t border-white/10">
+                          <div className="flex items-center mb-3">
+                            <Link size={12} className="text-white/40 mr-1" />
+                            <h4 className="text-[11px] uppercase tracking-wider font-bold text-white/60">
                               Connected Nodes
                             </h4>
                           </div>
-                          <div className="flex flex-wrap gap-1">
+                          <div className="flex flex-wrap gap-2">
                             {item.relatedIds.map((relatedId) => {
                               const relatedItem = timelineData.find(
                                 (i) => i.id === relatedId
                               );
                               return (
-                                <Button
+                                <button
                                   key={relatedId}
-                                  variant="outline"
-                                  size="sm"
-                                  className="flex items-center h-6 px-2 py-0 text-xs rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
+                                  className="flex items-center px-2.5 py-1 text-xs rounded border border-white/20 bg-transparent hover:bg-white/10 text-white transition-all font-medium"
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     toggleItem(relatedId);
@@ -298,17 +291,17 @@ export default function RadialOrbitalTimeline({ timelineData }) {
                                 >
                                   {relatedItem?.title}
                                   <ArrowRight
-                                    size={8}
-                                    className="ml-1 text-white/60"
+                                    size={12}
+                                    className="ml-1 text-white/40"
                                   />
-                                </Button>
+                                </button>
                               );
                             })}
                           </div>
                         </div>
                       )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 )}
               </div>
             );

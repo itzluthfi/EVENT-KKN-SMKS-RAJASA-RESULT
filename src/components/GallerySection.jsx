@@ -1,7 +1,9 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import Lenis from '@studio-freight/lenis';
 import { TESTIMONIALS } from '../data/constants';
 import IconRenderer from './IconRenderer';
+import { ZoomParallax } from './ui/zoom-parallax';
 
 const DOC_PHOTOS = [
   { day: 1, caption: 'Pembukaan & Ice Breaking — Siswa antusias di Day 1', color: '#10b981', emoji: 'Sprout', label: 'Day 1' },
@@ -136,11 +138,33 @@ function TestimonialCard({ testimonial, index, inView }) {
 export default function GallerySection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
-  const [dayFilter, setDayFilter] = useState('all');
 
-  const filtered = dayFilter === 'all'
-    ? DOC_PHOTOS
-    : DOC_PHOTOS.filter((p) => p.day === parseInt(dayFilter));
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smooth: true,
+    });
+   
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy();
+  }, []);
+
+  const galleryImages = [
+    { src: '/assets/foto/1.jpg', alt: 'Dokumentasi 1' },
+    { src: '/assets/foto/2.JPG', alt: 'Dokumentasi 2' },
+    { src: '/assets/foto/3.JPG', alt: 'Dokumentasi 3' },
+    { src: '/assets/foto/4.JPG', alt: 'Dokumentasi 4' },
+    { src: '/assets/foto/5.JPG', alt: 'Dokumentasi 5' },
+    { src: '/assets/foto/6.JPG', alt: 'Dokumentasi 6' },
+    { src: '/assets/foto/7.JPG', alt: 'Dokumentasi 7' },
+  ];
 
   return (
     <>
@@ -172,50 +196,34 @@ export default function GallerySection() {
         </div>
       </section>
 
-      {/* Gallery */}
-      <section id="gallery" className="section" style={{ paddingTop: '20px' }}>
-        <div className="container">
-          <motion.div
-            className="section-header"
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="section-badge emerald" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <IconRenderer name="Camera" size={14} /> Dokumentasi
-            </div>
-            <h2 className="section-title">
-              Momen yang <span className="gradient-text-emerald">Tak Terlupakan</span>
-            </h2>
-            <p className="section-subtitle">Kilas balik 4 hari penuh semangat belajar di SMK Rajasa Surabaya.</p>
-
-            {/* Day filter */}
-            <div style={{ marginTop: '24px' }}>
-              <div className="tabs" style={{ display: 'inline-flex' }}>
-                {['all', '1', '2', '3', '4'].map((d) => (
-                  <button
-                    key={d}
-                    className={`tab-btn ${dayFilter === d ? 'active' : ''}`}
-                    onClick={() => setDayFilter(d)}
-                  >
-                    {d === 'all' ? 'Semua' : `Day ${d}`}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            layout
-            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}
-          >
-            <AnimatePresence>
-              {filtered.map((photo, i) => (
-                <PhotoCard key={`${photo.day}-${photo.emoji}-${i}`} photo={photo} index={i} inView={inView} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+      {/* Gallery - Zoom Parallax */}
+      <section id="gallery" className="relative w-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
+        <div className="relative flex flex-col items-center justify-center min-h-[50vh] pt-32 pb-16 z-10">
+          {/* Radial spotlight */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[30px]"
+            style={{ background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.1), transparent 50%)' }}
+          />
+          
+          <div className="section-badge emerald" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+            <IconRenderer name="Camera" size={16} />
+            DOKUMENTASI
+          </div>
+          
+          <h2 className="section-title text-center" style={{ fontFamily: 'var(--font-display)', fontWeight: 800 }}>
+            Momen yang <span className="gradient-text-emerald">Tak Terlupakan</span>
+          </h2>
+          <p className="section-subtitle text-center">
+            Scroll perlahan ke bawah untuk menjelajahi kilas balik kegiatan KKN.
+          </p>
         </div>
+
+        <div className="relative z-0">
+          <ZoomParallax images={galleryImages} />
+        </div>
+        
+        <div style={{ height: '30vh' }} />
       </section>
     </>
   );

@@ -24,131 +24,28 @@ const col1 = heroMedia.slice(0, 4);
 const col2 = heroMedia.slice(4, 9);
 const col3 = heroMedia.slice(9, 13);
 
-const TYPEWRITER_TEXTS = [
-  'Building with AI',
-  'Designing the Future',
-  'Deploying Dreams',
-  'Learning & Growing',
-];
 
-function TypewriterText() {
-  const [textIndex, setTextIndex] = useState(0);
-  const [displayed, setDisplayed] = useState('');
-  const [deleting, setDeleting] = useState(false);
 
-  useEffect(() => {
-    const target = TYPEWRITER_TEXTS[textIndex];
-    let timeout;
 
-    if (!deleting && displayed.length < target.length) {
-      timeout = setTimeout(() => setDisplayed(target.slice(0, displayed.length + 1)), 60);
-    } else if (!deleting && displayed.length === target.length) {
-      timeout = setTimeout(() => setDeleting(true), 2000);
-    } else if (deleting && displayed.length > 0) {
-      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30);
-    } else if (deleting && displayed.length === 0) {
-      setDeleting(false);
-      setTextIndex((i) => (i + 1) % TYPEWRITER_TEXTS.length);
-    }
-
-    return () => clearTimeout(timeout);
-  }, [displayed, deleting, textIndex]);
-
-  return (
-    <span>
-      {displayed}
-      <span style={{ animation: 'blink-cursor 1s infinite', borderRight: '2px solid #10b981', marginLeft: '2px' }} />
-    </span>
-  );
-}
-
-function CountdownTimer() {
-  const eventDate = new Date('2026-05-19T08:00:00+07:00');
-  const [timeLeft, setTimeLeft] = useState(null);
-
-  useEffect(() => {
-    const calc = () => {
-      const now = new Date();
-      const diff = eventDate - now;
-      if (diff <= 0) return setTimeLeft(null);
-      setTimeLeft({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        mins: Math.floor((diff / (1000 * 60)) % 60),
-        secs: Math.floor((diff / 1000) % 60),
-      });
-    };
-    calc();
-    const id = setInterval(calc, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  if (!timeLeft) {
-    return (
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        style={{
-          display: 'inline-flex', alignItems: 'center', gap: '10px',
-          padding: '10px 24px', borderRadius: '9999px',
-          background: 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,182,212,0.2))',
-          border: '1px solid rgba(16,185,129,0.4)',
-          color: '#34d399', fontWeight: 700, fontSize: '14px',
-        }}
-      >
-        <IconRenderer name="PartyPopper" size={16} /> Event Selesai — Terima kasih sudah berpartisipasi!
-      </motion.div>
-    );
-  }
-
-  const units = [
-    { label: 'Hari', value: timeLeft.days },
-    { label: 'Jam', value: timeLeft.hours },
-    { label: 'Menit', value: timeLeft.mins },
-    { label: 'Detik', value: timeLeft.secs },
-  ];
-
-  return (
-    <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-      {units.map((u) => (
-        <motion.div
-          key={u.label}
-          whileHover={{ scale: 1.05 }}
-          style={{
-            minWidth: '72px', padding: '12px 16px',
-            background: 'rgba(255,255,255,0.04)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '14px',
-            textAlign: 'center',
-          }}
-        >
-          <div style={{
-            fontSize: '28px', fontWeight: 800,
-            fontFamily: 'JetBrains Mono, monospace',
-            background: 'linear-gradient(135deg, #10b981, #06b6d4)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-          }}>
-            {String(u.value).padStart(2, '0')}
-          </div>
-          <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 600, letterSpacing: '0.08em', marginTop: '2px' }}>
-            {u.label}
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
-}
 
 export default function HeroSection() {
   const containerVariants = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.12 } },
+    hidden: { opacity: 0, scale: 0.95, y: 30 },
+    visible: { 
+      opacity: 1, scale: 1, y: 0,
+      transition: { 
+        duration: 0.8, 
+        delay: 0.2, 
+        ease: [0.22, 1, 0.36, 1], 
+        staggerChildren: 0.12, 
+        delayChildren: 0.6 
+      } 
+    },
   };
 
   const itemVariants = {
-    hidden: { y: 40, opacity: 0 },
-    visible: { y: 0, opacity: 1, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
   };
 
   return (
@@ -157,7 +54,7 @@ export default function HeroSection() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '120px 0 80px',
+      padding: '100px 0 60px',
       position: 'relative',
       isolation: 'isolate',
       overflow: 'hidden',
@@ -176,120 +73,60 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Subtle Dark Overlay to ensure readability over particles and media */}
-      <div style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
-        background: 'linear-gradient(to bottom, rgba(2,6,23,0.2) 0%, rgba(2,6,23,0.4) 100%)',
-        zIndex: -1,
-      }} />
-      <div style={{
-        position: 'absolute', top: '20%', left: '10%',
-        width: '400px', height: '400px',
-        background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
-        borderRadius: '50%', pointerEvents: 'none',
-        animation: 'float 8s ease-in-out infinite',
-      }} />
-      <div style={{
-        position: 'absolute', top: '30%', right: '8%',
-        width: '350px', height: '350px',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
-        borderRadius: '50%', pointerEvents: 'none',
-        animation: 'float 10s ease-in-out infinite 3s',
-      }} />
+      {/* Overlay to ensure readability over particles and media */}
+      <div className="absolute inset-0 z-[-1] bg-gradient-to-b from-white/70 to-white/95 dark:from-slate-950/40 dark:to-slate-950/80" />
+      
+      {/* Decorative Orbs */}
+      <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] rounded-full pointer-events-none animate-float bg-emerald-500/10 dark:bg-emerald-500/15 blur-3xl" />
+      <div className="absolute top-[30%] right-[8%] w-[350px] h-[350px] rounded-full pointer-events-none animate-float blur-3xl bg-violet-500/10 dark:bg-violet-500/15" style={{ animationDelay: '3s' }} />
 
-      <div className="container" style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <div className="container relative z-10 w-full flex justify-center px-2 md:px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          style={{ 
-            textAlign: 'center', 
-            maxWidth: '900px', 
-            margin: '0 auto',
-            background: 'rgba(255, 255, 255, 0.03)',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            borderRadius: '32px',
-            padding: '60px 40px',
-            boxShadow: '0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)'
-          }}
+          style={{ padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 3rem)' }}
+          className="text-center w-[95%] md:w-full max-w-[950px] mx-auto bg-white/40 dark:bg-white/[0.03] backdrop-blur-2xl border border-black/5 dark:border-white/10 rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.05)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col justify-center items-center"
         >
           {/* Top badge */}
-          <motion.div variants={itemVariants}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              padding: '6px 18px 6px 8px',
-              background: 'rgba(16,185,129,0.08)',
-              border: '1px solid rgba(16,185,129,0.2)',
-              borderRadius: '9999px',
-              marginBottom: '28px',
-              fontSize: '12px', color: 'var(--emerald)', fontWeight: 600,
-            }}>
-              <span style={{
-                padding: '2px 10px', background: 'linear-gradient(135deg, var(--emerald), var(--cyan))',
-                borderRadius: '9999px', color: '#000', fontSize: '11px', fontWeight: 700,
-              }}>NEW</span>
-              Portfolio Style Hero
+          <motion.div variants={itemVariants} className="flex justify-center mb-6">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 rounded-full text-emerald-800 dark:text-emerald-400 font-bold text-xs md:text-sm tracking-widest uppercase shadow-sm">
+              <IconRenderer name="Award" size={16} className="hidden sm:block" />
+              Kegiatan Pengabdian Kepada Masyarakat
             </div>
           </motion.div>
 
-          {/* Title / Name */}
-          <motion.h1 variants={itemVariants} style={{
-            fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
-            fontWeight: 900,
-            letterSpacing: '-0.04em',
-            lineHeight: 1.05,
-            marginBottom: '20px',
-            fontFamily: 'Space Grotesk, sans-serif',
-            color: 'var(--text-primary)',
-          }}>
-            <span className="gradient-text-emerald">RAJASA</span>
-            {' '}
-            TECH
-            <br />
-            EVENT{' '}
-            <span className="gradient-text-violet">2026</span>
+          {/* Main Title */}
+          <motion.h1 variants={itemVariants} className="font-black tracking-tight mb-6 font-space text-slate-900 dark:text-white uppercase flex flex-col items-center gap-1 md:gap-2">
+            <span className="text-[clamp(1.4rem,3vw,2.5rem)] leading-none text-slate-800 dark:text-white/90">Pelatihan Pembuatan</span>
+            <span className="text-[clamp(2rem,5.5vw,4.5rem)] bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent leading-[1.1] py-1">Website Portofolio</span>
+            <span className="text-[clamp(0.75rem,1.5vw,1rem)] text-slate-500 dark:text-slate-400 font-bold tracking-[0.2em] mt-2">DENGAN BANTUAN AI</span>
           </motion.h1>
 
-          {/* Typewriter / Role */}
-          <motion.div variants={itemVariants} style={{
-            fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
-            color: 'var(--text-secondary)',
-            marginBottom: '12px',
-            fontFamily: 'JetBrains Mono, monospace',
-            minHeight: '36px',
-          }}>
-            <TypewriterText />
-          </motion.div>
-
-          {/* Tagline */}
-          <motion.p variants={itemVariants} style={{
-            fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '48px',
-            fontStyle: 'italic', letterSpacing: '0.02em', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'
-          }}>
-            <IconRenderer name="Sparkles" size={14} /> "Bridging Theory to Reality with AI" <IconRenderer name="Sparkles" size={14} />
+          {/* Target Location */}
+          <motion.p variants={itemVariants} className="text-[clamp(1rem,2vw,1.25rem)] font-bold text-cyan-700 dark:text-cyan-400 mb-8 tracking-wider uppercase">
+            Di SMKS Rajasa Surabaya
           </motion.p>
 
-          {/* CTA Buttons */}
-          <motion.div variants={itemVariants} style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '40px' }}>
-            <motion.a href="#projects" className="btn btn-primary" style={{ fontSize: '15px', padding: '14px 32px', display: 'flex', alignItems: 'center', gap: '10px' }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <IconRenderer name="Trophy" size={18} /> Lihat Semua Karya
-            </motion.a>
-            <motion.a href="#prompts" className="btn btn-secondary" style={{ fontSize: '15px', padding: '14px 32px', display: 'flex', alignItems: 'center', gap: '10px' }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <IconRenderer name="Zap" size={18} /> Prompt Playground
-            </motion.a>
-            <motion.a href="#team" className="btn btn-ghost" style={{ fontSize: '15px', padding: '14px 32px', display: 'flex', alignItems: 'center', gap: '10px' }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <IconRenderer name="Users" size={18} /> Tim Kami
-            </motion.a>
+          {/* Footer Info / Tagline */}
+          <motion.div variants={itemVariants} className="flex items-center justify-center gap-3 flex-wrap text-[0.85rem] text-slate-700 dark:text-slate-400 mb-10 font-mono tracking-wider font-semibold uppercase">
+            <IconRenderer name="GraduationCap" size={18} /> 
+            <span>Institut Teknologi Adhi Tama Surabaya</span>
+            <span className="text-emerald-600 dark:text-emerald-400 hidden sm:block">•</span>
+            <span>Tahun 2026</span>
           </motion.div>
 
-          {/* Countdown */}
-          <motion.div variants={itemVariants}>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '16px', fontWeight: 600 }}>
-              Countdown to Final Day — 19 Mei 2026
-            </p>
-            <CountdownTimer />
+          {/* CTA Buttons */}
+          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-3 mb-4">
+            <motion.a href="#projects" className="btn btn-primary text-sm px-6 py-3 flex items-center gap-2" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <IconRenderer name="Trophy" size={16} /> Lihat Semua Karya
+            </motion.a>
+            <motion.a href="#prompts" className="btn btn-secondary text-sm px-6 py-3 flex items-center gap-2" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <IconRenderer name="Zap" size={16} /> Prompt Playground
+            </motion.a>
+            <motion.a href="#team" className="text-sm px-6 py-3 flex items-center gap-2 bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 text-slate-800 dark:text-white border border-slate-200 dark:border-white/10 rounded-xl font-medium transition-colors" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <IconRenderer name="Users" size={16} /> Tim Kami
+            </motion.a>
           </motion.div>
         </motion.div>
 
@@ -298,19 +135,16 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2 }}
-          style={{
-            position: 'absolute', bottom: '-60px', left: '50%', transform: 'translateX(-50%)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
-          }}
+          className="absolute bottom-[-60px] left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         >
-          <span style={{ fontSize: '11px', color: '#475569', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            style={{ width: '20px', height: '32px', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', display: 'flex', justifyContent: 'center', paddingTop: '6px' }}
-          >
-            <div style={{ width: '4px', height: '8px', background: '#10b981', borderRadius: '2px' }} />
-          </motion.div>
+          <span className="text-[9px] text-slate-500 tracking-[0.2em] uppercase font-bold">Scroll Down</span>
+          <div className="w-[1px] h-12 bg-slate-300 dark:bg-white/10 relative overflow-hidden">
+            <motion.div
+              animate={{ y: ['-100%', '200%'] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+              className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-transparent via-emerald-500 to-transparent"
+            />
+          </div>
         </motion.div>
       </div>
     </section>
