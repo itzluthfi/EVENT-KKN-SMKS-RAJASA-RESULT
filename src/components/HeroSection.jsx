@@ -2,6 +2,27 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { EVENT_INFO } from '../data/constants';
 import IconRenderer from './IconRenderer';
+import { TestimonialsColumn } from './ui/testimonials-columns-1';
+
+const heroMedia = [
+  { type: 'image', src: '/assets/foto/1.jpg' },
+  { type: 'video', src: '/assets/video/1.mp4' },
+  { type: 'image', src: '/assets/foto/2.JPG' },
+  { type: 'image', src: '/assets/foto/3.JPG' },
+  { type: 'video', src: '/assets/video/2.MP4' },
+  { type: 'image', src: '/assets/foto/4.JPG' },
+  { type: 'image', src: '/assets/foto/5.JPG' },
+  { type: 'video', src: '/assets/video/3.MP4' },
+  { type: 'image', src: '/assets/foto/6.JPG' },
+  { type: 'video', src: '/assets/video/4.MP4' },
+  { type: 'image', src: '/assets/foto/7.JPG' },
+  { type: 'image', src: '/assets/foto/8.JPG' },
+  { type: 'video', src: '/assets/video/5.MP4' },
+];
+
+const col1 = heroMedia.slice(0, 4);
+const col2 = heroMedia.slice(4, 9);
+const col3 = heroMedia.slice(9, 13);
 
 const TYPEWRITER_TEXTS = [
   'Building with AI',
@@ -139,55 +160,60 @@ export default function HeroSection() {
       padding: '120px 0 80px',
       position: 'relative',
       isolation: 'isolate',
+      overflow: 'hidden',
     }}>
-      {/* Background Video — full cover wallpaper */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -2,
-          display: 'block',
-        }}
-      >
-        <source src="/assets/bg-video1.mp4" type="video/mp4" />
-      </video>
+      {/* Media Columns Background - Left and Right */}
+      <div className="absolute inset-0 z-[-2] flex justify-between px-2 sm:px-4 md:px-8 opacity-40 md:opacity-50 [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] pointer-events-none overflow-hidden">
+        {/* Left Columns */}
+        <div className="flex gap-4">
+          <TestimonialsColumn media={col1} duration={45} direction="up" className="w-[150px] sm:w-[200px] md:w-[250px]" />
+          <TestimonialsColumn media={col2} duration={55} direction="down" className="w-[150px] sm:w-[200px] md:w-[250px] hidden md:block" />
+        </div>
+        {/* Right Columns */}
+        <div className="flex gap-4">
+          <TestimonialsColumn media={col3} duration={40} direction="down" className="w-[150px] sm:w-[200px] md:w-[250px] hidden sm:block" />
+          <TestimonialsColumn media={col1} duration={60} direction="up" className="w-[150px] sm:w-[200px] md:w-[250px] hidden xl:block" />
+        </div>
+      </div>
 
-      {/* Video Overlay — layered gradient for readability */}
+      {/* Subtle Dark Overlay to ensure readability over particles and media */}
       <div style={{
         position: 'absolute',
         top: 0, left: 0, right: 0, bottom: 0,
-        background: 'linear-gradient(to bottom, rgba(2,6,23,0.55) 0%, rgba(2,6,23,0.45) 50%, rgba(2,6,23,0.75) 100%)',
+        background: 'linear-gradient(to bottom, rgba(2,6,23,0.2) 0%, rgba(2,6,23,0.4) 100%)',
         zIndex: -1,
       }} />
       <div style={{
         position: 'absolute', top: '20%', left: '10%',
         width: '400px', height: '400px',
-        background: 'radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(16,185,129,0.15) 0%, transparent 70%)',
         borderRadius: '50%', pointerEvents: 'none',
         animation: 'float 8s ease-in-out infinite',
       }} />
       <div style={{
         position: 'absolute', top: '30%', right: '8%',
         width: '350px', height: '350px',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
         borderRadius: '50%', pointerEvents: 'none',
         animation: 'float 10s ease-in-out infinite 3s',
       }} />
 
-      <div className="container" style={{ position: 'relative', zIndex: 1, width: '100%' }}>
+      <div className="container" style={{ position: 'relative', zIndex: 1, width: '100%', display: 'flex', justifyContent: 'center' }}>
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}
+          style={{ 
+            textAlign: 'center', 
+            maxWidth: '900px', 
+            margin: '0 auto',
+            background: 'rgba(255, 255, 255, 0.03)',
+            backdropFilter: 'blur(16px)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderRadius: '32px',
+            padding: '60px 40px',
+            boxShadow: '0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)'
+          }}
         >
           {/* Top badge */}
           <motion.div variants={itemVariants}>
@@ -204,11 +230,11 @@ export default function HeroSection() {
                 padding: '2px 10px', background: 'linear-gradient(135deg, var(--emerald), var(--cyan))',
                 borderRadius: '9999px', color: '#000', fontSize: '11px', fontWeight: 700,
               }}>NEW</span>
-              KKN Kelompok 2 ITATS × SMK Rajasa Surabaya
+              Portfolio Style Hero
             </div>
           </motion.div>
 
-          {/* Title */}
+          {/* Title / Name */}
           <motion.h1 variants={itemVariants} style={{
             fontSize: 'clamp(2.8rem, 7vw, 5.5rem)',
             fontWeight: 900,
@@ -226,7 +252,7 @@ export default function HeroSection() {
             <span className="gradient-text-violet">2026</span>
           </motion.h1>
 
-          {/* Typewriter */}
+          {/* Typewriter / Role */}
           <motion.div variants={itemVariants} style={{
             fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)',
             color: 'var(--text-secondary)',
@@ -246,7 +272,7 @@ export default function HeroSection() {
           </motion.p>
 
           {/* CTA Buttons */}
-          <motion.div variants={itemVariants} style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '60px' }}>
+          <motion.div variants={itemVariants} style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '40px' }}>
             <motion.a href="#projects" className="btn btn-primary" style={{ fontSize: '15px', padding: '14px 32px', display: 'flex', alignItems: 'center', gap: '10px' }} whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
               <IconRenderer name="Trophy" size={18} /> Lihat Semua Karya
             </motion.a>

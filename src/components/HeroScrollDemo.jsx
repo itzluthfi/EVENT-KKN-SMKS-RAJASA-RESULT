@@ -4,7 +4,7 @@ import { ContainerScroll } from "./ui/container-scroll-animation";
 
 export function HeroScrollDemo() {
   return (
-    <div className="flex flex-col overflow-hidden pb-[100px] pt-[100px]">
+    <div className="flex flex-col items-center justify-center w-full overflow-hidden pb-[100px] pt-[100px]">
       <ContainerScroll
         titleComponent={
           <>
@@ -18,7 +18,7 @@ export function HeroScrollDemo() {
         }
       >
         <img
-          src={`/assets/fotbar-kelompok.jpeg`}
+          src={`/assets/foto/fotbar-kelompok.jpeg`}
           alt="hero"
           className="mx-auto rounded-2xl object-cover h-full w-full object-center"
           draggable={false}
