@@ -2,22 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import CountUp from 'react-countup';
 import { EVENT_INFO, TECH_STACK } from '../data/constants';
-import * as LucideIcons from 'lucide-react';
-import { 
-  GraduationCap, 
-  Rocket, 
-  Code, 
-  Timer, 
-  Bot, 
-  Calendar, 
-  BarChart3, 
-  Settings,
-  Atom,
-  MessageSquare,
-  Github,
-  Play,
-  Palette
-} from 'lucide-react';
+import IconRenderer from './IconRenderer';
 
 const STATS = [
   { value: EVENT_INFO.stats.students, label: 'Siswa Peserta', suffix: '+', icon: 'GraduationCap', color: '#10b981', span: 'col-span-2 row-span-1' },
@@ -27,11 +12,6 @@ const STATS = [
   { value: EVENT_INFO.stats.aiPrompts, label: 'AI Prompts', suffix: '+', icon: 'Bot', color: '#ec4899', span: 'col-span-2 row-span-1' },
   { value: EVENT_INFO.stats.days, label: 'Hari Kegiatan', suffix: ' Hari', icon: 'Calendar', color: '#34d399', span: 'col-span-1 row-span-1' },
 ];
-
-function IconRenderer({ name, size = 32, color = 'currentColor', className = '' }) {
-  const Icon = LucideIcons[name] || LucideIcons.HelpCircle;
-  return <Icon size={size} color={color} className={className} />;
-}
 
 function StatCard({ stat, index, inView }) {
   // Ensure CountUp is treated as a component. 
@@ -95,11 +75,10 @@ function TechOrbit() {
         width: '80px', height: '80px', borderRadius: '50%',
         background: 'linear-gradient(135deg, var(--emerald), var(--violet))',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: '32px',
         boxShadow: '0 0 40px rgba(16,185,129,0.3)',
         zIndex: 2,
       }}>
-        <Bot size={32} color="#000" />
+        <IconRenderer name="Bot" size={32} color="#000" />
       </div>
 
       {TECH_STACK.slice(0, 6).map((tech, i) => {
@@ -152,8 +131,8 @@ export default function StatsSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="section-badge emerald">
-            <BarChart3 size={14} style={{ marginRight: '6px' }} /> Statistik Kegiatan
+          <div className="section-badge emerald" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <IconRenderer name="BarChart3" size={14} /> Statistik Kegiatan
           </div>
           <h2 className="section-title">
             Angka yang <span className="gradient-text-emerald">Berbicara</span>
@@ -177,7 +156,7 @@ export default function StatsSection() {
             transition={{ duration: 0.7, delay: 0.3 }}
           >
             <div className="section-badge" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Settings size={14} /> Tech Stack
+              <IconRenderer name="Settings" size={14} /> Tech Stack
             </div>
             <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)' }}>
               Modern <span className="gradient-text-emerald">Tools</span> for Modern <span className="gradient-text-violet">Education</span>

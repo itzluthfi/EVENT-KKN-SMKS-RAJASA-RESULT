@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Rocket, X, Menu } from 'lucide-react';
+import IconRenderer from './IconRenderer';
 
 const NAV_LINKS = [
   { href: '#hero', label: 'Home' },
@@ -96,7 +96,7 @@ export default function Navbar({ theme, toggleTheme }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         {/* Theme Toggle */}
         <button onClick={toggleTheme} className="theme-toggle">
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          {theme === 'dark' ? <IconRenderer name="Sun" size={20} /> : <IconRenderer name="Moon" size={20} />}
         </button>
 
         {/* CTA */}
@@ -107,7 +107,7 @@ export default function Navbar({ theme, toggleTheme }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Rocket size={16} /> Lihat Karya
+          <IconRenderer name="Rocket" size={16} /> Lihat Karya
         </motion.a>
 
         {/* Mobile Hamburger */}
@@ -126,7 +126,7 @@ export default function Navbar({ theme, toggleTheme }) {
             justifyContent: 'center',
           }}
         >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <IconRenderer name="X" size={24} /> : <IconRenderer name="Menu" size={24} />}
         </button>
       </div>
 
