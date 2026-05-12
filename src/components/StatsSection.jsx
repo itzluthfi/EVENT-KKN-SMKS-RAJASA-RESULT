@@ -3,6 +3,65 @@ import { motion, useInView } from 'framer-motion';
 import CountUp from 'react-countup';
 import { EVENT_INFO, TECH_STACK } from '../data/constants';
 import IconRenderer from './IconRenderer';
+import RadialOrbitalTimeline from './ui/radial-orbital-timeline';
+
+const timelineData = [
+  {
+    id: 1,
+    title: "Planning",
+    date: "Jan 2024",
+    content: "Project planning and requirements gathering phase.",
+    category: "Planning",
+    iconName: "Calendar",
+    relatedIds: [2],
+    status: "completed",
+    energy: 100,
+  },
+  {
+    id: 2,
+    title: "Design",
+    date: "Feb 2024",
+    content: "UI/UX design and system architecture.",
+    category: "Design",
+    iconName: "FileText",
+    relatedIds: [1, 3],
+    status: "completed",
+    energy: 90,
+  },
+  {
+    id: 3,
+    title: "Development",
+    date: "Mar 2024",
+    content: "Core features implementation and testing.",
+    category: "Development",
+    iconName: "Code",
+    relatedIds: [2, 4],
+    status: "in-progress",
+    energy: 60,
+  },
+  {
+    id: 4,
+    title: "Testing",
+    date: "Apr 2024",
+    content: "User testing and bug fixes.",
+    category: "Testing",
+    iconName: "User",
+    relatedIds: [3, 5],
+    status: "pending",
+    energy: 30,
+  },
+  {
+    id: 5,
+    title: "Release",
+    date: "May 2024",
+    content: "Final deployment and release.",
+    category: "Release",
+    iconName: "Timer",
+    relatedIds: [4],
+    status: "pending",
+    energy: 10,
+  },
+];
 
 const STATS = [
   { value: EVENT_INFO.stats.students, label: 'Siswa Peserta', suffix: '+', icon: 'GraduationCap', color: '#10b981', span: 'col-span-2 row-span-1' },
@@ -66,57 +125,6 @@ function StatCard({ stat, index, inView }) {
   );
 }
 
-function TechOrbit() {
-  return (
-    <div style={{ position: 'relative', width: '280px', height: '280px', margin: '0 auto' }}>
-      <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '80px', height: '80px', borderRadius: '50%',
-        background: 'linear-gradient(135deg, var(--emerald), var(--violet))',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 0 40px rgba(16,185,129,0.3)',
-        zIndex: 2,
-      }}>
-        <IconRenderer name="Bot" size={32} color="#000" />
-      </div>
-
-      {TECH_STACK.slice(0, 6).map((tech, i) => {
-        const angle = (i / 6) * 360;
-        const radius = 110;
-        return (
-          <motion.div
-            key={tech.name}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 25 + i * 2, repeat: Infinity, ease: 'linear' }}
-            style={{
-              position: 'absolute',
-              top: '50%', left: '50%',
-              width: 0, height: 0,
-            }}
-          >
-            <motion.div
-              animate={{ rotate: -360 }}
-              transition={{ duration: 25 + i * 2, repeat: Infinity, ease: 'linear' }}
-              style={{
-                position: 'absolute',
-                left: Math.cos((angle * Math.PI) / 180) * radius - 22,
-                top: Math.sin((angle * Math.PI) / 180) * radius - 22,
-                width: 44, height: 44, borderRadius: '12px',
-                background: 'var(--glass-bg)',
-                backdropFilter: 'blur(12px)',
-                border: `1px solid ${tech.color}40`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >
-            <IconRenderer name={tech.icon} size={20} color={tech.color} />
-          </motion.div>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-}
 
 export default function StatsSection() {
   const ref = useRef(null);
@@ -149,39 +157,21 @@ export default function StatsSection() {
           ))}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px', alignItems: 'center' }} className="build-grid">
+        <div style={{ marginTop: '120px' }}>
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
           >
-            <div className="section-badge" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <IconRenderer name="Settings" size={14} /> Tech Stack
+            <div className="section-badge mx-auto" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px', width: 'max-content' }}>
+              <IconRenderer name="Settings" size={14} /> Project Journey
             </div>
-            <h3 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '16px', color: 'var(--text-primary)' }}>
-              Modern <span className="gradient-text-emerald">Tools</span> for Modern <span className="gradient-text-violet">Education</span>
+            <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+              Development <span className="gradient-text-emerald">Lifecycle</span>
             </h3>
-            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, marginBottom: '24px' }}>
-              Kami menggunakan teknologi terkini untuk memastikan siswa SMK Rajasa siap menghadapi industri.
-              AI bukan untuk menggantikan, tapi untuk memberdayakan kreativitas manusia.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {TECH_STACK.map((tech) => (
-                <div key={tech.name} className="tag" style={{ color: tech.color, borderColor: `${tech.color}40`, padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <IconRenderer name={tech.icon} size={14} color={tech.color} /> {tech.name}
-                </div>
-              ))}
-            </div>
           </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.4 }}
-          >
-            <TechOrbit />
-          </motion.div>
+          <RadialOrbitalTimeline timelineData={timelineData} />
         </div>
       </div>
 

@@ -1,20 +1,18 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
-import { cn } from "../../lib/utils";
 
 export const ContainerScroll = ({
   titleComponent,
   children,
-  className,
 }) => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
   });
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -26,38 +24,20 @@ export const ContainerScroll = ({
   }, []);
 
   const scaleDimensions = () => {
-    return isMobile ? [0.8, 0.9] : [1.05, 1];
+    return isMobile ? [0.7, 0.9] : [1.05, 1];
   };
 
-  const rotate = useTransform(scrollYProgress, [0, 1], [15, 0]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  
-  // Parallax background text - moves in opposite direction
-  const textTranslate = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
     <div
-      className={cn(
-        "h-[35rem] md:h-[60rem] flex items-center justify-center relative overflow-hidden",
-        className
-      )}
+      className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20"
       ref={containerRef}
     >
-      {/* Background Parallax Text Layer */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div 
-          style={{ y: textTranslate }}
-          className="flex flex-col items-center justify-center h-full opacity-[0.05] dark:opacity-[0.1] font-black italic tracking-tighter"
-        >
-          <h2 className="text-[20vw] leading-[0.8] text-primary">FUTURE</h2>
-          <h2 className="text-[20vw] leading-[0.8] text-emerald">DESIGN</h2>
-          <h2 className="text-[20vw] leading-[0.8] text-violet">AI TECH</h2>
-        </motion.div>
-      </div>
-
       <div
-        className="py-10 md:py-20 w-full relative px-6 md:px-16"
+        className="py-10 md:py-40 w-full relative"
         style={{
           perspective: "1000px",
         }}
@@ -77,7 +57,7 @@ export const Header = ({ translate, titleComponent }) => {
       style={{
         translateY: translate,
       }}
-      className="div max-w-5xl mx-auto text-center relative z-10"
+      className="div max-w-5xl mx-auto text-center"
     >
       {titleComponent}
     </motion.div>
@@ -87,6 +67,7 @@ export const Header = ({ translate, titleComponent }) => {
 export const Card = ({
   rotate,
   scale,
+  translate,
   children,
 }) => {
   return (
@@ -95,11 +76,11 @@ export const Card = ({
         rotateX: rotate,
         scale,
         boxShadow:
-          "0 0 #0000004d, 0 20px 50px #00000066, 0 50px 100px #00000044",
+          "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
       }}
-      className="-mt-12 mx-auto h-[22rem] md:h-[38rem] w-full border-8 border-[#1a1a1a] p-1 md:p-2 bg-[#0a0a0a] rounded-[40px] shadow-2xl relative z-10"
+      className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
     >
-      <div className="h-full w-full overflow-hidden rounded-[32px] bg-gray-100 dark:bg-zinc-900">
+      <div className="h-full w-full overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-4 ">
         {children}
       </div>
     </motion.div>
