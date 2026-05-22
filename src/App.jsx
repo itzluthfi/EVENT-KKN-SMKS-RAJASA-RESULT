@@ -19,8 +19,8 @@ function CursorGlow() {
   useEffect(() => {
     const move = (e) => {
       if (cursorRef.current) {
-        cursorRef.current.style.left = e.clientX + 'px';
-        cursorRef.current.style.top = e.clientY + 'px';
+        // Use translate3d for hardware acceleration instead of top/left layout thrashing
+        cursorRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
       }
     };
     window.addEventListener('mousemove', move);

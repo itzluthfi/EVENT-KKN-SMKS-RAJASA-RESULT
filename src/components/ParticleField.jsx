@@ -16,7 +16,7 @@ export default function ParticleField() {
     resize();
     window.addEventListener('resize', resize);
 
-    const particles = Array.from({ length: 120 }, () => ({
+    const particles = Array.from({ length: 70 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       size: Math.random() * 1.5 + 0.3,
@@ -30,6 +30,8 @@ export default function ParticleField() {
     let animFrame;
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const opacityMultiplier = isLight ? 2.5 : 1;
 
       particles.forEach((p) => {
         p.x += p.speedX;
@@ -41,10 +43,18 @@ export default function ParticleField() {
         if (p.y < 0) p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        const opacity = p.opacity * (0.7 + Math.sin(p.pulse) * 0.3);
+        let opacity = p.opacity * (0.7 + Math.sin(p.pulse) * 0.3) * opacityMultiplier;
+        if (opacity > 1) opacity = 1;
+        
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color + Math.round(opacity * 255).toString(16).padStart(2, '0');
+        ctx.arc(p.x, p.y, p.size * (isLight ? 1.5 : 1), 0, Math.PI * 2);
+        
+        if (isLight) {
+          // Use slate-800 for particles in light mode instead of bright colors which blend with white bg
+          ctx.fillStyle = `rgba(30, 41, 59, ${opacity})`;
+        } else {
+          ctx.fillStyle = p.color + Math.round(opacity * 255).toString(16).padStart(2, '0');
+        }
         ctx.fill();
       });
 
@@ -58,9 +68,9 @@ export default function ParticleField() {
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            const alpha = (1 - dist / 120) * 0.1;
-            ctx.strokeStyle = `rgba(139, 92, 246, ${alpha})`;
-            ctx.lineWidth = 0.5;
+            const alpha = (1 - dist / 120) * (isLight ? 0.4 : 0.15);
+            ctx.strokeStyle = isLight ? `rgba(15, 23, 42, ${alpha})` : `rgba(139, 92, 246, ${alpha})`;
+            ctx.lineWidth = isLight ? 1 : 0.5;
             ctx.stroke();
           }
         });

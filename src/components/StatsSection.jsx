@@ -64,12 +64,12 @@ const timelineData = [
 ];
 
 const STATS = [
-  { value: EVENT_INFO.stats.students, label: 'Siswa Peserta', suffix: '+', icon: 'GraduationCap', color: '#10b981', span: 'col-span-2 row-span-1' },
-  { value: EVENT_INFO.stats.projects, label: 'Project Selesai', suffix: '', icon: 'Rocket', color: '#8b5cf6', span: 'col-span-1 row-span-1' },
-  { value: EVENT_INFO.stats.linesOfCode, label: 'Baris Kode', suffix: '+', icon: 'Code', color: '#06b6d4', format: true, span: 'col-span-1 row-span-2' },
-  { value: EVENT_INFO.stats.trainingHours, label: 'Jam Pelatihan', suffix: ' Jam', icon: 'Timer', color: '#f59e0b', span: 'col-span-1 row-span-1' },
-  { value: EVENT_INFO.stats.aiPrompts, label: 'AI Prompts', suffix: '+', icon: 'Bot', color: '#ec4899', span: 'col-span-2 row-span-1' },
-  { value: EVENT_INFO.stats.days, label: 'Hari Kegiatan', suffix: ' Hari', icon: 'Calendar', color: '#34d399', span: 'col-span-1 row-span-1' },
+  { value: EVENT_INFO.stats.students, label: 'Siswa Peserta', suffix: '+', icon: 'GraduationCap', color: '#10b981', imageUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop' },
+  { value: EVENT_INFO.stats.projects, label: 'Project Selesai', suffix: '', icon: 'Rocket', color: '#8b5cf6', imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop' },
+  { value: EVENT_INFO.stats.linesOfCode, label: 'Baris Kode', suffix: '+', icon: 'Code', color: '#06b6d4', imageUrl: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop' },
+  { value: EVENT_INFO.stats.trainingHours, label: 'Jam Pelatihan', suffix: ' Jam', icon: 'Timer', color: '#f59e0b', imageUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop' },
+  { value: EVENT_INFO.stats.aiPrompts, label: 'AI Prompts', suffix: '+', icon: 'Bot', color: '#ec4899', imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop' },
+  { value: EVENT_INFO.stats.days, label: 'Hari Kegiatan', suffix: ' Hari', icon: 'Calendar', color: '#34d399', imageUrl: 'https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?q=80&w=2070&auto=format&fit=crop' },
 ];
 
 function StatCard({ stat, index, inView }) {
@@ -126,6 +126,8 @@ function StatCard({ stat, index, inView }) {
 }
 
 
+import { InteractiveImageAccordion } from './ui/interactive-image-accordion';
+
 export default function StatsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-100px' });
@@ -134,28 +136,18 @@ export default function StatsSection() {
     <section id="stats" className="section" ref={ref}>
       <div className="container">
         <motion.div
-          className="section-header"
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
+          className="mb-32"
         >
-          <div className="section-badge emerald" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <IconRenderer name="BarChart3" size={14} /> Statistik Kegiatan
-          </div>
-          <h2 className="section-title">
-            Angka yang <span className="gradient-text-emerald">Berbicara</span>
-          </h2>
-          <p className="section-subtitle">
-            Setiap baris kode dan setiap jam pelatihan adalah langkah menuju masa depan.
-          </p>
+          <InteractiveImageAccordion 
+            stats={STATS} 
+            title="Angka yang" 
+            highlightWord="Berbicara" 
+            subtitle="Setiap baris kode dan setiap jam pelatihan adalah rekam jejak langkah dedikasi siswa menuju masa depan." 
+          />
         </motion.div>
-
-        {/* Bento Grid Stats */}
-        <div className="bento-grid" style={{ marginBottom: '80px' }}>
-          {STATS.map((stat, i) => (
-            <StatCard key={stat.label} stat={stat} index={i} inView={inView} />
-          ))}
-        </div>
 
         <div style={{ marginTop: '120px' }}>
           <motion.div
@@ -175,13 +167,6 @@ export default function StatsSection() {
         </div>
       </div>
 
-      <style>{`
-        .col-span-2 { grid-column: span 2; }
-        .row-span-2 { grid-row: span 2; }
-        @media (max-width: 768px) {
-          .col-span-2, .row-span-2 { grid-column: span 1; grid-row: span 1; }
-        }
-      `}</style>
     </section>
   );
 }

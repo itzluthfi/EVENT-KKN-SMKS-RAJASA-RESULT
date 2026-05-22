@@ -10,17 +10,15 @@ function PromptCard({ prompt, index, inView, isActive, onClick }) {
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onClick={onClick}
-      style={{
-        background: isActive ? `linear-gradient(135deg, ${prompt.color}15, transparent)` : 'rgba(255,255,255,0.02)',
-        backdropFilter: 'blur(16px)',
-        border: `1px solid ${isActive ? prompt.color + '40' : 'rgba(255,255,255,0.06)'}`,
-        borderRadius: '16px',
-        padding: '20px',
-        cursor: 'pointer',
-        transition: 'all 0.3s',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
+      className={`p-5 rounded-2xl cursor-pointer transition-all duration-300 relative overflow-hidden border backdrop-blur-md ${
+        isActive 
+          ? '' 
+          : 'bg-slate-100/60 dark:bg-white/[0.02] border-slate-300/50 dark:border-white/[0.06] hover:bg-slate-200/60 dark:hover:bg-white/[0.04]'
+      }`}
+      style={isActive ? {
+        background: `linear-gradient(135deg, ${prompt.color}15, transparent)`,
+        borderColor: `${prompt.color}40`,
+      } : {}}
     >
       {isActive && (
         <motion.div
@@ -38,7 +36,7 @@ function PromptCard({ prompt, index, inView, isActive, onClick }) {
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-            <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#f1f5f9', lineHeight: 1.3 }}>{prompt.title}</h4>
+            <h4 className="text-[14px] font-bold text-slate-800 dark:text-slate-100 leading-[1.3]">{prompt.title}</h4>
             <span style={{
               padding: '2px 8px', borderRadius: '9999px', fontSize: '10px', fontWeight: 700,
               background: `${prompt.color}15`, border: `1px solid ${prompt.color}30`, color: prompt.color,
@@ -74,27 +72,17 @@ function PromptViewer({ prompt }) {
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
         transition={{ duration: 0.35 }}
-        style={{
-          background: 'rgba(0,0,0,0.4)',
-          backdropFilter: 'blur(20px)',
-          border: `1px solid ${prompt.color}25`,
-          borderRadius: '20px',
-          overflow: 'hidden',
-          height: '100%',
-        }}
+        className="h-full rounded-[20px] overflow-hidden backdrop-blur-xl border shadow-xl dark:shadow-none bg-slate-50/90 dark:bg-black/40"
+        style={{ borderColor: `${prompt.color}25` }}
       >
         {/* Header */}
-        <div style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          background: `linear-gradient(135deg, ${prompt.color}10, transparent)`,
-        }}>
+        <div className="px-5 py-4 border-b border-slate-200 dark:border-white/[0.06] flex justify-between items-center"
+             style={{ background: `linear-gradient(135deg, ${prompt.color}10, transparent)` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <IconRenderer name={prompt.emoji} color={prompt.color} size={20} />
             <div>
-              <div style={{ fontSize: '13px', fontWeight: 700, color: '#f1f5f9' }}>{prompt.title}</div>
-              <div style={{ fontSize: '11px', color: '#64748b' }}>Prompt yang membawa {prompt.winner}</div>
+              <div className="text-[13px] font-bold text-slate-800 dark:text-slate-100">{prompt.title}</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400">Prompt yang membawa {prompt.winner}</div>
             </div>
           </div>
 
@@ -102,16 +90,11 @@ function PromptViewer({ prompt }) {
             onClick={handleCopy}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            style={{
-              padding: '8px 16px', borderRadius: '9999px', border: 'none',
-              background: copied
-                ? 'linear-gradient(135deg, #10b981, #06b6d4)'
-                : `rgba(255,255,255,0.08)`,
-              color: copied ? '#000' : '#f1f5f9',
-              fontSize: '12px', fontWeight: 700, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: '8px',
-              transition: 'all 0.3s',
-            }}
+            className={`px-4 py-2 rounded-full border-none text-[12px] font-bold cursor-pointer flex items-center gap-2 transition-all duration-300 shadow-sm ${
+              copied
+                ? 'bg-gradient-to-br from-emerald-500 to-cyan-500 text-white'
+                : 'bg-white dark:bg-white/[0.08] text-slate-700 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-white/[0.12]'
+            }`}
           >
             {copied ? (
               <>
@@ -134,20 +117,12 @@ function PromptViewer({ prompt }) {
             ))}
           </div>
 
-          <pre style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '12.5px',
-            color: '#e2e8f0',
-            lineHeight: 1.8,
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            margin: 0,
-          }}>
-            <span style={{ color: '#64748b' }}>$ </span>
+          <pre className="font-mono text-[12.5px] leading-[1.8] whitespace-pre-wrap break-words m-0 text-slate-700 dark:text-slate-200">
+            <span className="text-slate-400 dark:text-slate-500">$ </span>
             <span style={{ color: prompt.color }}>ai-prompt</span>
-            <span style={{ color: '#94a3b8' }}> --generate</span>
+            <span className="text-slate-500 dark:text-slate-400"> --generate</span>
             {'\n\n'}
-            <span style={{ color: '#e2e8f0' }}>{prompt.prompt}</span>
+            <span>{prompt.prompt}</span>
           </pre>
         </div>
       </motion.div>

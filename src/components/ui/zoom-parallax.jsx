@@ -24,29 +24,29 @@ export function ZoomParallax({ images }) {
         {images.map(({ src, alt }, index) => {
           const scale = scales[index % scales.length];
 
+          const getChildStyles = (i) => {
+            switch (i) {
+              case 1: return { top: '-30vh', left: '5vw', width: '35vw', height: '30vh' };
+              case 2: return { top: '-10vh', left: '-25vw', width: '20vw', height: '45vh' };
+              case 3: return { left: '27.5vw', width: '25vw', height: '25vh' };
+              case 4: return { top: '27.5vh', left: '5vw', width: '20vw', height: '25vh' };
+              case 5: return { top: '27.5vh', left: '-22.5vw', width: '30vw', height: '25vh' };
+              case 6: return { top: '22.5vh', left: '25vw', width: '15vw', height: '15vh' };
+              default: return { width: '25vw', height: '25vh' }; // center image
+            }
+          };
+
           return (
             <motion.div
               key={index}
               style={{ scale }}
-              className={`absolute top-0 flex h-full w-full items-center justify-center ${
-                index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''
-              } ${
-                index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''
-              } ${
-                index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''
-              } ${
-                index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''
-              } ${
-                index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''
-              } ${
-                index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''
-              } `}
+              className="absolute top-0 flex h-full w-full items-center justify-center"
             >
-              <div className="relative h-[25vh] w-[25vw]">
+              <div className="relative" style={getChildStyles(index)}>
                 <img
                   src={src || '/placeholder.svg'}
                   alt={alt || `Parallax image ${index + 1}`}
-                  className="h-full w-full object-cover rounded-xl shadow-2xl"
+                  className="h-full w-full object-cover"
                 />
               </div>
             </motion.div>

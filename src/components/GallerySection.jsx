@@ -4,6 +4,7 @@ import Lenis from '@studio-freight/lenis';
 import { TESTIMONIALS } from '../data/constants';
 import IconRenderer from './IconRenderer';
 import { ZoomParallax } from './ui/zoom-parallax';
+import InteractiveBentoGallery from './ui/interactive-bento-gallery';
 
 const DOC_PHOTOS = [
   { day: 1, caption: 'Pembukaan & Ice Breaking — Siswa antusias di Day 1', color: '#10b981', emoji: 'Sprout', label: 'Day 1' },
@@ -146,14 +147,18 @@ export default function GallerySection() {
       smooth: true,
     });
    
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
-    return () => lenis.destroy();
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
   }, []);
 
   const galleryImages = [
@@ -165,6 +170,25 @@ export default function GallerySection() {
     { src: './assets/foto/6.JPG', alt: 'Dokumentasi 6' },
     { src: './assets/foto/7.JPG', alt: 'Dokumentasi 7' },
   ];
+
+  const spans = [
+    "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
+    "md:col-span-2 md:row-span-2 col-span-1 sm:col-span-2 sm:row-span-2",
+    "md:col-span-1 md:row-span-3 sm:col-span-2 sm:row-span-2",
+    "md:col-span-2 md:row-span-2 sm:col-span-1 sm:row-span-2",
+    "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
+    "md:col-span-2 md:row-span-2 sm:col-span-1 sm:row-span-2",
+    "md:col-span-1 md:row-span-3 sm:col-span-1 sm:row-span-2",
+  ];
+
+  const bentoMediaItems = galleryImages.map((img, idx) => ({
+    id: idx + 1,
+    type: 'image',
+    title: `Momen KKN ${idx + 1}`,
+    desc: img.alt,
+    url: img.src,
+    span: spans[idx % spans.length]
+  }));
 
   return (
     <>
@@ -197,7 +221,7 @@ export default function GallerySection() {
       </section>
 
       {/* Gallery - Zoom Parallax */}
-      <section id="gallery" className="relative w-full overflow-hidden" style={{ background: 'var(--bg-primary)' }}>
+      <section id="gallery" className="relative w-full" style={{ background: 'var(--bg-primary)' }}>
         <div className="relative flex flex-col items-center justify-center min-h-[50vh] pt-32 pb-16 z-10">
           {/* Radial spotlight */}
           <div
@@ -224,6 +248,15 @@ export default function GallerySection() {
         </div>
         
         <div style={{ height: '30vh' }} />
+
+        {/* Interactive Bento Gallery */}
+        <div className="relative z-20 pb-32 pt-16 bg-white dark:bg-[#020617]">
+          <InteractiveBentoGallery 
+            mediaItems={bentoMediaItems}
+            title="Eksplorasi Galeri KKN"
+            description="Seret, susun, dan klik setiap momen untuk melihat resolusi penuhnya."
+          />
+        </div>
       </section>
     </>
   );
